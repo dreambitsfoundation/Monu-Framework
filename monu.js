@@ -1,14 +1,30 @@
 // Starting the navigation randering using Jquery
 
 $(document).ready(function(){
+  loadMustache();
   hideAllTemplates();
   checkActiveAnchor();
+  templateEngine();
 
   $(".anchor").click(function(){
     var anchor_target = $(this).attr("target");
     activateTemplate(anchor_target);
   });
 });
+
+//Load Mustache Templating Engine
+function loadMustache(){
+	var mustache = document.createElement('script');  
+	mustache.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js');
+	document.head.appendChild(mustache);
+}
+
+function templateEngine(){
+	var template = $("mtemplatemodel").html();
+	Mustache.parse(template);
+	var rendered = Mustache.render(template,{"some_information": "Hello"});
+	$("div").html(rendered);
+}
 
 function checkActiveAnchor(){
   var active_target = $(".anchor.m_active_menu").attr("target");
