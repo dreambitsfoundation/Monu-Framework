@@ -23,9 +23,32 @@ function loadMustache(){
 
 //Monu Router Class
 function MRouter(targetURl,viewfunction){
+	/*
+		*Target URL is the target parameter seen on the get request
+		
+		*viewFunction is the callback function which is to be initiated 
+		 while target URL maches the current target parameter
+	*/ 
 	this.targetURl = null;
-	this.run = function(){
-		viewfunction();
+	this.views = null;
+	this.run = function(DataSet){
+		this.views = viewfunction(DataSet);
+		if(this.views instanceof Array){
+			for(var i=0; i<this.views.length; i++){
+				this.views[i].StageView();
+			}
+		}else{
+			this.views.StageView();
+		}
+	}
+	this.dissolve = function(){
+		if(this.views instanceof Array){
+			for(var i=0; i<this.views.length; i++){
+				this.views[i].CurtainView();
+			}
+		}else{
+			this.views.CurtainView();
+		}
 	}
 }
 
@@ -102,17 +125,30 @@ function MonuApp(){
 		    //Need to add the router locator
 		    this.ParseURL();
 		    //This point forward we have the current request target and current request DataSet.
-
+		    if(this.currentRequestTarget == null){
+		    	if(this.root == null){
+		    		throw ("Error 404: Root Router Not Set");
+		    	}else{
+		    		if(this.activeView){
+		    			this.activeView.dissolve();
+		    		}
+		    		var router = this.root;
+		    		router.run(this.currentRequestDataSet);
+		    		this.activeView = router;
+		    	}
+		    }else{
+		    	var router = this.getRouter();
+		    	this.activeView.dissolve();
+			    router.run(this.currentRequestDataSet);
+			    this.activeView = router;
+		    }		    
 		};
 	}
 
 	this.getRouter = function(){
-		var router = 
+		var router = this.runnerObjects[currentRequestTarget] // Returns Router Object
+		return router;
 	}
-
-
-
-
 }
 
 
@@ -122,9 +158,11 @@ function MView(){
 	this.template = null;
 	this.view = null;
 	this.content = {};
+	this.html = "";
+	this.isStaged = false;
 	this.registerView = function(sourceTemplate,targetView){
 		this.template = sourceTemplate;
-		this.view = targetView;
+		this.view = $("[m-view="+targetView+"]");
 	}
 
 	this.addContent = function(key,value){
@@ -135,7 +173,21 @@ function MView(){
 		var templateModel = $("mtemplate" + obj.sourceTemplate).html();
 		Mustache.parse(templateModel);
 		var renderModel = Mustache.render(templateModel,obj.content);
-		return renderModel;
+		this.html = renderModel
+	}
+
+	this.StageView = function(){
+		if(!this.isStaged){
+			this.view.html(this.html);
+			this.isStaged = true;
+		}
+	}
+
+	this.CurtainView = function(){
+		if(this.isStaged){
+			this.view.html("");
+			this.view.hide();
+		}
 	}
 }
 
