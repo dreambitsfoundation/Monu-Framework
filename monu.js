@@ -2,10 +2,11 @@
 
 $(document).ready(function(){
 	$(".manchor").css("cursor","pointer");
-  loadMustache();
-  hideAllTemplates();
-  checkActiveAnchor();
-  templateEngine();
+	//$("[m-view]").hide();
+  // loadMustache();
+  //hideAllTemplates();
+  // checkActiveAnchor();
+  // templateEngine();
 
   // $(".manchor").click(function(){
   //   var anchor_target = $(this).attr("target");
@@ -29,10 +30,14 @@ function MRouter(targetURl,viewfunction){
 		*viewFunction is the callback function which is to be initiated 
 		 while target URL maches the current target parameter
 	*/ 
-	this.targetURl = null;
+	this.targetURl = targetURl;
 	this.views = null;
 	this.run = function(DataSet){
+		//After the execution of the view function. Views are retured to the router.
 		this.views = viewfunction(DataSet);
+		// if(this.views){
+		// 	console.log(this.views)
+		// }
 		if(this.views instanceof Array){
 			for(var i=0; i<this.views.length; i++){
 				this.views[i].StageView();
@@ -59,12 +64,43 @@ function MonuApp(){
 	//this.urls = [];
 	this.runnerObjects = {};
 	this.activeView = null; //Router Object
-	this.currentRequestTarget = "";
+	this.currentRequestTarget = null;
 	this.currentRequestDataSet = {};
 	this.root = null; //Router Object
+	this.registerRoot = function(Router){
+		this.root=Router
+	}
+
 	this.registerRouter = function(Router){
 		//this.urls.push(Router);
 		this.runnerObjects[Router.targetURl] = Router;
+	}
+
+	this.ProcessUrl = function(){
+			//Need to add the router locator
+		    this.ParseURL();
+		    //This point forward we have the current request target and current request DataSet.
+		    if(this.currentRequestTarget == null){
+		    	if(this.root == null){
+		    		throw ("Error 404: Root Router Not Set");
+		    	}else{
+		    		if(this.activeView){
+		    			this.activeView.dissolve();
+		    		}
+		    		var router = this.root;
+		    		router.run(this.currentRequestDataSet);
+		    		this.activeView = router;
+		    	}
+		    }else{
+		    	var router = this.getRouter();
+		    	if(this.activeView){
+		    		this.activeView.dissolve();
+		    	}
+		    	console.log(router);
+			    router.run(this.currentRequestDataSet);
+			    console.log(router);
+			    this.activeView = router;
+		    }		  
 	}
 
 	this.ParseURL = function () {
@@ -92,7 +128,7 @@ function MonuApp(){
     }
 
 	this.run = function(){
-		$(".manchor").click(function(){
+		$(".manchor").click(function(event){
 			var template = $(this).attr("target");
 			var data = $(this).attr("data");
 			var target_string = "?target="+template;
@@ -100,9 +136,12 @@ function MonuApp(){
 				try{
 					JSON.parse(data);
 					target_string += "&"+this.serializeCurrentDataSet()
+				}catch(e){
+					throw("Invalid data format");
 				}
 			}
 			window.history.pushState({},null,target_string);
+			event.preventDefault();
 		});
 
 		(function(history){
@@ -122,46 +161,32 @@ function MonuApp(){
 		    //                ' times (State object: ' +
 		    //                JSON.stringify(e.state) + ')');
 
-		    //Need to add the router locator
-		    this.ParseURL();
-		    //This point forward we have the current request target and current request DataSet.
-		    if(this.currentRequestTarget == null){
-		    	if(this.root == null){
-		    		throw ("Error 404: Root Router Not Set");
-		    	}else{
-		    		if(this.activeView){
-		    			this.activeView.dissolve();
-		    		}
-		    		var router = this.root;
-		    		router.run(this.currentRequestDataSet);
-		    		this.activeView = router;
-		    	}
-		    }else{
-		    	var router = this.getRouter();
-		    	this.activeView.dissolve();
-			    router.run(this.currentRequestDataSet);
-			    this.activeView = router;
-		    }		    
+		    this.ProcessUrl();
 		};
+		//Run ProcessUrl function of Class Initialization
+		$("[m-view]").hide();
+		$("mtemplate").hide();
+		this.ProcessUrl();
 	}
 
+	//Returns the router assosciated with the current URL pattern
 	this.getRouter = function(){
-		var router = this.runnerObjects[currentRequestTarget] // Returns Router Object
+		var router = this.runnerObjects[this.currentRequestTarget] // Returns Router Object
 		return router;
 	}
 }
-
+//End of Monu App Class
 
 
 //Monu View Class
 function MView(){
-	this.template = null;
-	this.view = null;
+	this.template = null; //Jquery Selector object
+	this.view = null; //Jquery Selector object
 	this.content = {};
 	this.html = "";
 	this.isStaged = false;
 	this.registerView = function(sourceTemplate,targetView){
-		this.template = sourceTemplate;
+		this.template = $("mtemplate[m_model="+sourceTemplate+"]");
 		this.view = $("[m-view="+targetView+"]");
 	}
 
@@ -169,21 +194,27 @@ function MView(){
 		this.content[key] = value;
 	}
 
+	//PrepareView function loads the Mustache template and assign the data Context to the template
+	//provided that the keys in the content must match the template field.
 	this.prepareView = function(){
-		var templateModel = $("mtemplate" + obj.sourceTemplate).html();
+		var templateModel = this.template.html();
 		Mustache.parse(templateModel);
-		var renderModel = Mustache.render(templateModel,obj.content);
+		var renderModel = Mustache.render(templateModel,this.content);
 		this.html = renderModel
 	}
 
+	//StageView function sets the view object html content and show.
 	this.StageView = function(){
 		if(!this.isStaged){
 			this.view.html(this.html);
+			this.view.show();
 			this.isStaged = true;
 		}
 	}
 
+	//CurtainView function cleares the html content in the view object and hides it.
 	this.CurtainView = function(){
+		console.log("hiding");
 		if(this.isStaged){
 			this.view.html("");
 			this.view.hide();
@@ -192,7 +223,7 @@ function MView(){
 }
 
 
-
+//Previous Code 
 function templateEngine(){
 	var template = $("mtemplate").html();
 	Mustache.parse(template);
