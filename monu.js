@@ -2,17 +2,16 @@
 
 $(document).ready(function(){
 	$(".manchor").css("cursor","pointer");
-	//$("[m-view]").hide();
-  // loadMustache();
-  //hideAllTemplates();
-  // checkActiveAnchor();
-  // templateEngine();
-
-  // $(".manchor").click(function(){
-  //   var anchor_target = $(this).attr("target");
-  //   activateTemplate(anchor_target);
-  // });
 });
+
+jQuery.loadScript = function (url, callback) {
+    jQuery.ajax({
+        url: url,
+        dataType: 'script',
+        success: callback,
+        async: true
+    });
+}
 
 //Load Mustache Templating Engine
 function loadMustache(){
@@ -61,7 +60,7 @@ function MRouter(targetURl,viewfunction){
 //Monu Application
 
 function MonuApp(){
-	//this.urls = [];
+	MonuApp.instances.push(this);
 	this.runnerObjects = {};
 	this.activeView = null; //Router Object
 	this.currentRequestTarget = null;
@@ -105,17 +104,26 @@ function MonuApp(){
 
 	this.ParseURL = function () {
         var sPageURL = window.location.search.substring(1);
-        var sURLVariables = sPageURL.split('&');
-        for (var i = 0; i < sURLVariables.length; i++)
-        {
-            var sParameterName = sURLVariables[i].split('=');
-            if (sParameterName[0] == "target")
-            {
-            	this.currentRequestTarget = decodeURIComponent(sParameterName[1]);
-            }else{
-            	this.currentRequestDataSet[sParameterName[0]] = decodeURIComponent(sParameterName[1]);
-            }
+        if(document.location.search == ""){
+        	this.currentRequestTarget = null;
+        	this.currentRequestDataSet = {};
+        }else{
+        	this.currentRequestDataSet={};
+        	var sURLVariables = sPageURL.split('&');
+	        for (var i = 0; i < sURLVariables.length; i++)
+	        {
+	            var sParameterName = sURLVariables[i].split('=');
+	            if (sParameterName[0] == "target")
+	            {
+	            	console.log(decodeURIComponent(sParameterName[1]));
+	            	this.currentRequestTarget = decodeURIComponent(sParameterName[1]);
+	            }else{
+	            	this.currentRequestDataSet[sParameterName[0]] = decodeURIComponent(sParameterName[1]);
+	            }
+	        }
+	        console.log(this.currentRequestTarget);	
         }
+        
     }
 
     this.serializeCurrentDataSet = function(){
@@ -127,6 +135,16 @@ function MonuApp(){
 		  return str.join("&");
     }
 
+    var createNavigationQueryString = function(JSONQueryData){
+    	var final_query_string = "";
+    	for(var q in JSONQueryData){
+    		if(JSONQueryData.hasOwnProperty(q)){
+    			final_query_string += "&" + encodeURIComponent(q) + "=" + encodeURIComponent(JSONQueryData[q]);
+    		}
+    	}
+    	return final_query_string;
+    }
+
 	this.run = function(){
 		$(".manchor").click(function(event){
 			var template = $(this).attr("target");
@@ -134,35 +152,27 @@ function MonuApp(){
 			var target_string = "?target="+template;
 			if(data){
 				try{
-					JSON.parse(data);
-					target_string += "&"+this.serializeCurrentDataSet()
+					data = JSON.parse(data.replaceAll("'","\""));
+					console.log(typeof data);
+					target_string += createNavigationQueryString(data);
 				}catch(e){
-					throw("Invalid data format");
+					throw(e);
 				}
 			}
 			window.history.pushState({},null,target_string);
 			event.preventDefault();
 		});
 
-		(function(history){
-		    var pushState = history.pushState;
-		    history.pushState = function(state) {
-		        if (typeof history.onpushstate == "function") {
-		            history.onpushstate({state: state});
-		        }
-		        return pushState.apply(history, arguments);
-		    };
-		})(window.history);
+		
 
 		window.onpopstate = history.onpushstate = function(e) {
-		    // i++;
-		    // $('#location').text(window.location.href);
-		    // $('#msg').text('History changed ' + i  +
-		    //                ' times (State object: ' +
-		    //                JSON.stringify(e.state) + ')');
-
-		    this.ProcessUrl();
+		    console.log(e.State);
+		    console.log(window.location.href);
+		    return RefreshAllRoutes(window.location.href);
 		};
+
+
+
 		//Run ProcessUrl function of Class Initialization
 		$("[m-view]").hide();
 		$("mtemplate").hide();
@@ -177,6 +187,55 @@ function MonuApp(){
 }
 //End of Monu App Class
 
+
+MonuApp.prototype.destroy = function () {
+    var i = 0;
+    while (MonuApp.instances[i] !== this) { i++; }
+    MonuApp.instances.splice(i, 1);
+};
+
+MonuApp.instances = [];
+
+(function(history){
+    var pushState = history.pushState;
+    history.pushState = function(state) {
+        if (typeof history.onpushstate == "function") {
+            history.onpushstate({state: state});
+        }
+        var a = pushState.apply(history, arguments);
+        RefreshAllRoutes(window.location.href);
+        return a;
+    };
+    var popState = history.popState;
+    history.popState = function(state) {
+        if (typeof history.onpopstate == "function") {
+            history.onpopstate({state: state});
+        }
+        var a = popState.apply(history, arguments);
+        RefreshAllRoutes(window.location.href);
+        return a;
+    };
+})(window.history);
+
+/*
+	RefreshAllRoutes function is used to call ProcessUrl() menthod 
+	in all the instance of MonuApp class on change in window.history stack
+*/
+
+function RefreshAllRoutes(a){
+	for(var i = 0; i<MonuApp.instances.length; i++){
+		MonuApp.instances[i].ProcessUrl();
+	}
+}
+
+// End of RefreshAllRoutes method
+
+//Definition of replaceAll function for String class.
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
+//End of String class replaceAll() method.
 
 //Monu View Class
 function MView(){
@@ -198,9 +257,20 @@ function MView(){
 	//provided that the keys in the content must match the template field.
 	this.prepareView = function(){
 		var templateModel = this.template.html();
-		Mustache.parse(templateModel);
-		var renderModel = Mustache.render(templateModel,this.content);
-		this.html = renderModel
+		var renderModel = "";
+		if (typeof Mustache == 'undefined') {
+			$.getScript("https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js")
+			.done(function(){
+				Mustache.parse(templateModel);
+			    console.log(this.content);
+				renderModel = Mustache.render(templateModel,this.content);
+			})
+		}else{
+			Mustache.parse(templateModel);
+		    console.log(this.content);
+			renderModel = Mustache.render(templateModel,this.content); 
+		}
+		this.html = renderModel;	
 	}
 
 	//StageView function sets the view object html content and show.
@@ -220,34 +290,4 @@ function MView(){
 			this.view.hide();
 		}
 	}
-}
-
-
-//Previous Code 
-function templateEngine(){
-	var template = $("mtemplate").html();
-	Mustache.parse(template);
-	var rendered = Mustache.render(template,{"some_information": "Hello"});
-	$("div").html(rendered);
-}
-
-function checkActiveAnchor(){
-  var active_target = $(".anchor.m_active_menu").attr("target");
-  activateTemplate(active_target);
-}
-
-function hideAllTemplates(){
-  //This function will be used to hide all the templates.
-  $("mtemplate").removeClass("m_active").addClass("m_hidden");
-}
-
-function activateTemplate(anchor_target){
-  //Here anchor target is the id of the template that is mentioned
-  //target parameter in <a> with anchor class
-  (function(){
-    //Deactivate all other anchors
-    $(".anchor.m_active_menu").removeClass("m_active_menu");
-    hideAllTemplates();
-  })();
-  $("mtemplate"+anchor_target).removeClass("m_hidden").addClass("m_active");
 }
