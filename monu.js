@@ -181,7 +181,7 @@ function MonuApp(){
 
 	//Returns the router assosciated with the current URL pattern
 	this.getRouter = function(){
-		if(this.currentRequestTarget = ""){
+		if(this.currentRequestTarget == ""){
 			return this.root;
 		}
 		var router = this.runnerObjects[this.currentRequestTarget] // Returns Router Object
