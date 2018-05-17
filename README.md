@@ -1,5 +1,19 @@
 ## Welcome to GitHub Pages
 
+```markdown
+`
+	Mustache CDN
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+
+	Development CDN
+	<script src="https://rawgit.com/dreambitsfoundation/Monu-Framework/master/monu.js" type="text/javascript"></script>
+
+	Production CDN
+	<script src="https://cdn.rawgit.com/dreambitsfoundation/Monu-Framework/3e3238b7/monu.js" type="text/javascript"></script>
+
+`
+```
+
 You can use the [editor on GitHub](https://github.com/dreambitsfoundation/Monu-Framework/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
