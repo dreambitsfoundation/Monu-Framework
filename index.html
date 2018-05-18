@@ -22,7 +22,7 @@
 
 		<!--Monu Template Model-->
 		<mtemplate m_model="abcd">
-			My Name is {{some_information}} Datas {{x}} - {{y}}
+			My Name is {[{some_information}]} Datas {[{x}]} - {{y}}
 		</mtemplate>
 
 		<mtemplate m_model="cdef">
@@ -38,6 +38,7 @@
 		<script src="monu.js" type="text/javascript"></script>
 		<script>
 			var app = new MonuApp();
+			app.changeTemplateTags('{[{','}]}');
 
 			var firstRouter = new MRouter(null,function(dataSet){
 				var aView = new MView();
@@ -57,7 +58,7 @@
 				aView.StageView();
 				return aView;
 			});
-
+			
 			app.registerRoot(firstRouter);
 			app.registerRouter(secondRouter);
 			app.run();

@@ -66,12 +66,17 @@ function MonuApp(){
 	this.currentRequestTarget = null;
 	this.currentRequestDataSet = {};
 	this.root = null; //Router Object
+	this.defaultTemplateTags = new Array('{{','}}');
+	this.changeTemplateTags = function(startTag, endTag){
+		if(typeof startTag == "string" && typeof endTag == "string"){
+			this.defaultTemplateTags = new Array(startTag,endTag);
+		}
+	}
 	this.registerRoot = function(Router){
 		this.root=Router
 	}
 
 	this.registerRouter = function(Router){
-		//this.urls.push(Router);
 		this.runnerObjects[Router.targetURl] = Router;
 	}
 
@@ -176,6 +181,14 @@ function MonuApp(){
 		//Run ProcessUrl function of Class Initialization
 		$("[m-view]").hide();
 		$("mtemplate").hide();
+		if (typeof Mustache == 'undefined') {
+			$.getScript("https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js")
+			.done(function(){
+				Mustache.tags=this.defaultTemplateTags;
+			})
+		}else{
+			Mustache.tags=this.defaultTemplateTags;
+		}
 		this.ProcessUrl();
 	}
 
@@ -264,11 +277,13 @@ function MView(){
 		if (typeof Mustache == 'undefined') {
 			$.getScript("https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js")
 			.done(function(){
+				//Mustache.tags = this.defaultTemplateTags;
 				Mustache.parse(templateModel);
 			    console.log(this.content);
 				renderModel = Mustache.render(templateModel,this.content);
 			})
 		}else{
+			//Mustache.tags = this.defaultTemplateTags;
 			Mustache.parse(templateModel);
 		    console.log(this.content);
 			renderModel = Mustache.render(templateModel,this.content); 
