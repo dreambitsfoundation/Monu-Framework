@@ -16,7 +16,7 @@ You need to mention **Mustache CDN** and **Monu CDN** just after you **JQuery** 
 
 ```markdown
 `
-	Mustache CDN
+	Mustache. CDN
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
 
 	Development CDN
