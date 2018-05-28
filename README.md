@@ -1,4 +1,18 @@
-## Welcome to GitHub Pages
+# Monu Framework
+## The simplest and hackable Javascript Frontend Framework
+
+##Intro
+
+Monu is a versatile Javascript framework developed on **MVC (Model View Controller)** architechture to provide frontend rendering to your web application.
+
+It is powered by **JQuery** and **Moustache Framework**.
+
+
+##Installation
+
+It is very easy to install **Monu** in your exising web application.
+
+You need to mention **Mustache CDN** and **Monu CDN** just after you **JQuery** library import.
 
 ```markdown
 `
@@ -13,6 +27,8 @@
 
 `
 ```
+
+
 
 You can use the [editor on GitHub](https://github.com/dreambitsfoundation/Monu-Framework/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
