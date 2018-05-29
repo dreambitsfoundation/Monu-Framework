@@ -1,32 +1,33 @@
 # Monu Framework
 ## The simplest and hackable Javascript Frontend Framework
 
-##Intro
+## Intro
 
 Monu is a versatile Javascript framework developed on **MVC (Model View Controller)** architechture to provide frontend rendering to your web application.
 
 It is powered by **JQuery** and **Moustache Framework**.
 
 
-##Installation
+## Installation
 
 It is very easy to install **Monu** in your exising web application.
 
 You need to mention **Mustache CDN** and **Monu CDN** just after you **JQuery** library import.
 
-```markdown
+```html
 `
-	Mustache. CDN
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+Mustache. CDN
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
 
-	Development CDN
-	<script src="https://rawgit.com/dreambitsfoundation/Monu-Framework/master/monu.js" type="text/javascript"></script>
+Development CDN
+<script src="https://rawgit.com/dreambitsfoundation/Monu-Framework/master/monu.js" type="text/javascript"></script>
 
-	Production CDN
-	<script src="https://cdn.rawgit.com/dreambitsfoundation/Monu-Framework/3e3238b7/monu.js" type="text/javascript"></script>
+Production CDN
+<script src="https://cdn.rawgit.com/dreambitsfoundation/Monu-Framework/3e3238b7/monu.js" type="text/javascript"></script>
 
 `
 ```
+
 
 
 
