@@ -15,7 +15,6 @@ It is very easy to install **Monu** in your exising web application.
 You need to mention **Mustache CDN** and **Monu CDN** just after you **JQuery** library import.
 
 ```html
-`
 Mustache. CDN
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
 
@@ -24,10 +23,26 @@ Development CDN
 
 Production CDN
 <script src="https://cdn.rawgit.com/dreambitsfoundation/Monu-Framework/3e3238b7/monu.js" type="text/javascript"></script>
-
-`
 ```
 
+## Initialisation
+
+To initialise a **Monu Application** you have to create an instance of the object **MonuApp**.
+
+```html
+<script type="text/javascript">
+  var app = new MonuApp();
+</script>
+```
+
+Monu Framework is distributed into three modules **App**, **View** and **Router**
+
+1. **App**
+
+
+
+2. **View**
+3. **Router**
 
 
 
