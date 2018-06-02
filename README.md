@@ -102,6 +102,18 @@ And the target DOM be like
 
 _Note:_ MTemplate is explained in-depth in later part of the documentation.
 
+Finally to compile a template **.prepareView()** function should be called on each view instances.
+
+```javascript
+
+var view = new MView("source_MTemplate_DOM", "target_DOM_to_render_content");
+view.addContent("first_name", "John");
+view.addContent("last_name", "Doe");
+// Compile the template
+view.prepareView();
+
+```
+
 3. **Router**
 
 A Router module named by **MRouter**, it is the module that handles all the routes for the MonuApp instance.
@@ -109,6 +121,17 @@ MonuApp uses the _history_ stack of the **Window** object of a browser to naviga
 
 The change of location state is detected by the MonuApp instance and approprite router is execute that matches the value of the target parameter of the present _query string_.
 
+A MRouter is instantiated using two parameters _target-value_ and the _callback function_.
+Where _target-value_ is used to match the value of the "target" variable in the current URL query string, if the current _target_ value matches the _target-value_ parameter value then the router is executed by the MonuApp instance.
+
+A MRouter is initialized by 
+
+```javascript
+
+var router = new MRouter("target-value", function(){});
+
+```
+MonuApp collects the URL query string data and process it in the key,value pair format and is stored in a Javascript Object that is passed to the _callback_ function by default. 
 
 
 
