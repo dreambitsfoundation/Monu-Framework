@@ -128,10 +128,53 @@ A MRouter is initialized by
 
 ```javascript
 
-var router = new MRouter("target-value", function(){});
+var router = new MRouter("target-value", function(queryStringParameters){});
 
 ```
-MonuApp collects the URL query string data and process it in the key,value pair format and is stored in a Javascript Object that is passed to the _callback_ function by default. 
+MonuApp collects the URL query string data and process it in the key,value pair format and is stored in a Javascript Object that is passed to the _callback_ function by default by the MRouter object. 
+
+To access the current query string parameters pass a variable to the _callback_ function as parameter. 
+_Note:_ you can use your own variable in place of _queryStringParameters_.
+
+A MView instances are initialised inside MRouter callback function. Each MRouter may have _n_ number of MView instances as per the developer's requirement.
+
+For Example:
+
+Let the current URL be `http://www.example.com/subnav?target=user_info&firstname=John&lastname=Doe`
+
+Then to catch the current route a router should be designed like this.
+
+```javascript
+
+var router = new MRouter("user_info", function(userData){
+	var view = new MView("user_details_model","user_details_view");
+	view.addContent("firstname",userData["firstname"]);
+	view.addContent("lastname",userData["lastname"]);
+	view.prepareView();
+	//All the view objects must be returned in the end of the router callback or else they won't be executed
+	return view;
+})
+
+```
+If this code is executed in favour of the HTML below
+
+```html
+
+<div m-view="user_details_view">
+	<!-- Here the content from the template wii sit -->
+</div>
+
+<mtemplate m_model="user_details_model">
+	Hello! My name is {{firstname}} {{lastname}}. 
+</mtemplate>
+
+```
+This will produce the following result in the _div_ DOM
+```markdown
+
+Hello! My name is John Doe.
+
+```
 
 
 
