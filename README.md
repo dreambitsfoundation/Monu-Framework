@@ -39,7 +39,17 @@ Monu Framework is distributed into three modules **App**, **View** and **Router*
 
 1. **App**
 
+The App module is named by **MonuApp**, it contains all the required functions needed to run the MonuApp instance.
 
+```html
+<script type="text/javascript">
+	// Create a MonuApp instance
+	var app = new MonuApp();
+	
+	// Run Monu app
+	app.run();
+</script>
+```
 
 2. **View**
 3. **Router**
