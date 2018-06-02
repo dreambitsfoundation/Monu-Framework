@@ -68,8 +68,8 @@ An **MView** object is initialised inside a **MRouter** module. MRouter is descr
 var view = new MView(source_MTemplate_DOM, target_DOM_to_render_content);
 
 ```
-Here _source_MTemplate_DOM_ refers to the value of **m_model** attibute of the source _MTemplate_ DOM.
-And _target_DOM_to_render_content_ refers to the value of the **m-view** attribute of the target DOM. This target DOM can be any HTML DOM.
+Here _source_MTemplate_DOM_ parameter refers to the value of **m_model** attibute of the source _MTemplate_ DOM.
+And _target_DOM_to_render_content_ parameter refers to the value of the **m-view** attribute of the target DOM. This target DOM can be any HTML DOM.
 
 To assign dynamic values into the MTemplate **.addContent(key,value)** function will be called on the MView instance.
 Here the **key** refers to the specific template tags places in the MTemplate DOM.
@@ -81,7 +81,7 @@ view.addContent("first_name", "John");
 view.addContent("last_name", "Doe");
 
 ```
-The associated MTemplate will be defined as follows
+An associated MTemplate will be defined as follows
 
 ```html
 
@@ -100,8 +100,15 @@ And the target DOM be like
 
 ```
 
+_Note:_ MTemplate is explained in-depth in later part of the documentation.
 
 3. **Router**
+
+A Router module named by **MRouter**, it is the module that handles all the routes for the MonuApp instance.
+MonuApp uses the _history_ stack of the **Window** object of a browser to navigate between different targets without reloading the pages. 
+
+The change of location state is detected by the MonuApp instance and approprite router is execute that matches the value of the target parameter of the present _query string_.
+
 
 
 
