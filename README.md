@@ -63,6 +63,44 @@ Monu is built on **MustacheJS** templating engine which provides the templating 
 
 An **MView** object is initialised inside a **MRouter** module. MRouter is described in the **Router** part of the documentation.
 
+```javascript
+
+var view = new MView(source_MTemplate_DOM, target_DOM_to_render_content);
+
+```
+Here _source_MTemplate_DOM_ refers to the value of **m_model** attibute of the source _MTemplate_ DOM.
+And _target_DOM_to_render_content_ refers to the value of the **m-view** attribute of the target DOM. This target DOM can be any HTML DOM.
+
+To assign dynamic values into the MTemplate **.addContent(key,value)** function will be called on the MView instance.
+Here the **key** refers to the specific template tags places in the MTemplate DOM.
+
+```javascript
+
+var view = new MView(source_MTemplate_DOM, target_DOM_to_render_content);
+view.addContent("first_name", "John");
+view.addContent("last_name", "Doe");
+
+```
+The associated MTemplate will be defined as follows
+
+```html
+
+<mtemplate m_model="source-template">
+	Hi My name is {{first_name}} {{last_name}}!
+</mtemplate>	
+
+```
+
+And the target DOM be like 
+
+```html
+
+<div m-view="target-dom">
+</div>
+
+```
+
+
 3. **Router**
 
 
