@@ -46,12 +46,23 @@ The App module is named by **MonuApp**, it contains all the required functions n
 	// Create a MonuApp instance
 	var app = new MonuApp();
 	
+	/* This place is meant to initialize the MRouter instances */
+	
 	// Run Monu app
 	app.run();
 </script>
 ```
+_Note:_ A MonuApp instance cannot run without minimum one router. Most specifically the *root* MRouter instance. Calling a *run()* function without registering a root router will cause the app to throw exception.
+
+_You will learn more about MRouter instance in the later part of this tutorial._
 
 2. **View**
+
+The View module is named by **MView**, it contains all the functions required to render a **MTemplate** to a tagret DOM element.
+Monu is built on **MustacheJS** templating engine which provides the templating capability to the MView Module.
+
+An **MView** object is initialised inside a **MRouter** module. MRouter is described in the **Router** part of the documentation.
+
 3. **Router**
 
 
