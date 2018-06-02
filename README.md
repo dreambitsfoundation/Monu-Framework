@@ -52,7 +52,7 @@ The App module is named by **MonuApp**, it contains all the required functions n
 	app.run();
 </script>
 ```
-_Note:_ A MonuApp instance cannot run without minimum one router. Most specifically the *root* MRouter instance. Calling a *run()* function without registering a root router will cause the app to throw exception.
+_Note:_ A MonuApp instance cannot run without minimum one router. Most specifically the *root* MRouter instance. Calling a *`run()`* function without registering a root router will cause the app to throw exception and crash.
 
 _You will learn more about MRouter instance in the later part of this tutorial._
 
@@ -136,7 +136,7 @@ MonuApp collects the URL query string data and process it in the key,value pair 
 To access the current query string parameters pass a variable to the _callback_ function as parameter. 
 _Note:_ you can use your own variable in place of _queryStringParameters_.
 
-A MView instances are initialised inside MRouter callback function. Each MRouter may have _n_ number of MView instances as per the developer's requirement.
+MView instances are initialised inside MRouter callback function. Each MRouter may have _n_ number of MView instances as per the developer's requirement.
 
 For Example:
 
@@ -151,9 +151,9 @@ var router = new MRouter("user_info", function(userData){
 	view.addContent("firstname",userData["firstname"]);
 	view.addContent("lastname",userData["lastname"]);
 	view.prepareView();
-	//All the view objects must be returned in the end of the router callback or else they won't be executed
+	//All the view instances must be returned in the end of the router callback function or else they won't be executed
 	return view;
-})
+});
 
 ```
 If this code is executed in favour of the HTML below
@@ -175,6 +175,12 @@ This will produce the following result in the _div_ DOM
 Hello! My name is John Doe.
 
 ```
+### Routers are very specific
+As explained above in the **App** section, a MonuApp instance must have a root router or else it will throw exception while executed. 
+
+A root router does not have a _target-value_ and hence it is _null_ incase of the root router.
+A root MRouter instance is executed when either there is no query string in the currrent URL or the _target_ value in the current query string is empty.
+
 
 
 
