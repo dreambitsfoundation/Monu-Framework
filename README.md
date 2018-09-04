@@ -193,7 +193,50 @@ A Router instance houses the callback function that will be executed everytime u
 _Please Note:_ **MView** view instances can be made to be rendered earlier within the _callback_ function. This is explained in the later part of this documentation.
 
 ### Connecting the Router to the MonuApp instance
-After the router is initialized it has to be registered with the current _Monu App_ instance to listen to routes. 
+After the router is initialized it has to be registered with the current _Monu App_ instance to listen to routes. Here the **registerRouter(routerInstanceVariable)** comes into use. **registerRouter(routerInstanceVariable)** is a memeber function of the MonuApp instance, so it has to be called on the current MonuAPP instance variable.
+
+Moreover there is another function called **registerRoot(rootRouterInstanceVariable)** which is also a member function of the MonuApp class that is responsible for registering the _Root Router_ for the current MonuApp instance. **Be informed:** MonuApp instance will throw exception without a root router. So, consider creating a root router instance and register it prior to calling the **run()** function on the MonuApp instance because **RootRouter** is mandatory where as other member routers are complimentary.
+
+Lets Look at an example:
+
+```javascript
+
+var app = new MonuApp();
+
+var rootRouter = new MRouter(null,function(dataSet){
+	var view = new MView();
+	view.registerView("source_mtemplate_DOM","destination_DOM");
+	
+	//Any other code you would like to add
+
+	view.prepareView()
+	return view;
+});
+
+
+var contactRouter = new MRouter("contact",function(dataSet){
+
+	//This router renders two different views
+
+	var view = new MView();
+	view.registerView("source_contact_mtemplate_DOM","destination_DOM");
+	
+	var viewTwo = new MView();
+	viewTwo.registerView("second_source_contact_mtemplate_DOM","destination_DOM");
+	
+	//Any other code you would like to add
+
+	return [view,viewTwo];
+});
+
+//Registering Routers
+app.registerRoot(rootRouter);
+app.registerRouter(contactRouter);
+
+//Finally, running the MonuApp instance
+app.run();
+
+```
 
 ### 
 
