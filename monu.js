@@ -152,22 +152,24 @@ function MonuApp(){
     }
 
 	this.run = function(){
-		$(".manchor").click(function(event){
-			var template = $(this).attr("target");
-			var data = $(this).attr("data");
-			var target_string = "?target="+template;
-			if(data){
-				try{
-					data = JSON.parse(data.replaceAll("'","\""));
-					console.log(typeof data);
-					target_string += createNavigationQueryString(data);
-				}catch(e){
-					throw(e);
-				}
-			}
-			window.history.pushState({},null,target_string);
-			event.preventDefault();
-		});
+		// $(".manchor").click(function(event){
+		// 	var template = $(this).attr("target");
+		// 	var data = $(this).attr("data");
+		// 	var target_string = "?target="+template;
+		// 	if(data){
+		// 		try{
+		// 			data = JSON.parse(data.replaceAll("'","\""));
+		// 			console.log(typeof data);
+		// 			target_string += createNavigationQueryString(data);
+		// 		}catch(e){
+		// 			throw(e);
+		// 		}
+		// 	}
+		// 	window.history.pushState({},null,target_string);
+		// 	event.preventDefault();
+		// });
+
+		MAnchorClickEventListner();
 
 		
 
@@ -204,6 +206,30 @@ function MonuApp(){
 }
 //End of Monu App Class
 
+//Click Event Listener
+MAnchorClickEventListner.instances = [];
+
+function MAnchorClickEventListner(){
+	console.log(MAnchorClickEventListner.instances.length);
+	MAnchorClickEventListner.instances.length = 0;
+	MAnchorClickEventListner.instances.push(this);
+	$(".manchor").click(function(event){
+		var template = $(this).attr("target");
+		var data = $(this).attr("data");
+		var target_string = "?target="+template;
+		if(data){
+			try{
+				data = JSON.parse(data.replaceAll("'","\""));
+				console.log(typeof data);
+				target_string += createNavigationQueryString(data);
+			}catch(e){
+				throw(e);
+			}
+		}
+		window.history.pushState({},null,target_string);
+		event.preventDefault();
+	});
+}
 
 MonuApp.prototype.destroy = function () {
     var i = 0;

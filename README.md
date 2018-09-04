@@ -76,7 +76,8 @@ Here the **key** refers to the specific template tags places in the MTemplate DO
 
 ```javascript
 
-var view = new MView(source_MTemplate_DOM, target_DOM_to_render_content);
+var view = new MView();
+view.registerView(source_MTemplate_DOM, target_DOM_to_render_content);
 view.addContent("first_name", "John");
 view.addContent("last_name", "Doe");
 
@@ -181,8 +182,20 @@ As explained above in the **App** section, a MonuApp instance must have a root r
 A root router does not have a _target-value_ and hence it is _null_ incase of the root router.
 A root MRouter instance is executed when either there is no query string in the currrent URL or the _target_ value in the current query string is empty.
 
+Everytime we create a new router they need to be registered within the app instance which is responsible for executing the router.
 
+### Routers are synchronous
+Routers are created as synchronous instances hence **MView** elements are good to be initialized when a synchronous function has completed executing or else the values passed to a View template which is an end result of the asynchronous task may result to an **undefined** value.
 
+### A Router Instance in Depth
+A Router instance houses the callback function that will be executed everytime user navigates to a new location using an **MAnchor** (described in the later part of this documentation). This may contains operations related to preparing data for the hence created **MView** instances, AJAX requests, initialization of **MView** instances etc. A router's callback function must return all variable having **MView** instance or else the hence initilized elements in the missing MView instance variable are not shown in the resulting route view.
+
+_Please Note:_ **MView** view instances can be made to be rendered earlier within the _callback_ function. This is explained in the later part of this documentation.
+
+### Connecting the Router to the MonuApp instance
+After the router is initialized it has to be registered with the current _Monu App_ instance to listen to routes. 
+
+### 
 
 You can use the [editor on GitHub](https://github.com/dreambitsfoundation/Monu-Framework/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
