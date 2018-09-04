@@ -25,9 +25,47 @@ Production CDN
 <script src="https://cdn.rawgit.com/dreambitsfoundation/Monu-Framework/3e3238b7/monu.js" type="text/javascript"></script>
 ```
 
-## Initialisation
+Let's see a complete example
 
-To initialise a **Monu Application** you have to create an instance of the object **MonuApp**.
+```html
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Head Contents like <title>, <meta>, <style>, <link> etc -->
+	</head>
+	<body>
+
+
+		<!-- Jquery CDN -->
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+		<!-- Mustache CDN -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+
+		<!-- Monu JS CDN -->
+		<script src="https://cdn.rawgit.com/dreambitsfoundation/Monu-Framework/3e3238b7/monu.js" type="text/javascript"></script>
+
+		<!-- Create Monu Application Instance -->
+		<script type="text/javascript">
+			
+			// Initialization
+
+			var app = new MonuApp();
+
+			// Follow the instruction in the below documentation to get the MonuApp running
+
+			app.run()
+		</script>
+	</body>
+</html>
+
+```
+
+## Initialization
+
+To initialize a **Monu Application** you have to create an instance of the object **MonuApp**.
 
 ```html
 <script type="text/javascript">
@@ -65,8 +103,11 @@ An **MView** object is initialised inside a **MRouter** module. MRouter is descr
 
 ```javascript
 
-var view = new MView(source_MTemplate_DOM, target_DOM_to_render_content);
+var view = new MView();
 
+// Set the source mtemplate and destination DOM element
+
+view.registerView("source_MTemplate_DOM", "target_DOM_to_render_content");
 ```
 Here _source_MTemplate_DOM_ parameter refers to the value of **m_model** attibute of the source _MTemplate_ DOM.
 And _target_DOM_to_render_content_ parameter refers to the value of the **m-view** attribute of the target DOM. This target DOM can be any HTML DOM.
@@ -107,7 +148,8 @@ Finally to compile a template **.prepareView()** function should be called on ea
 
 ```javascript
 
-var view = new MView("source_MTemplate_DOM", "target_DOM_to_render_content");
+var view = new MView();
+view.registerView("source_MTemplate_DOM", "target_DOM_to_render_content");
 view.addContent("first_name", "John");
 view.addContent("last_name", "Doe");
 // Compile the template
@@ -185,7 +227,7 @@ A root MRouter instance is executed when either there is no query string in the 
 Everytime we create a new router they need to be registered within the app instance which is responsible for executing the router.
 
 ### Routers are synchronous
-Routers are created as synchronous instances hence **MView** elements are good to be initialized when a synchronous function has completed executing or else the values passed to a View template which is an end result of the asynchronous task may result to an **undefined** value.
+Routers are created as synchronous instances hence **MView** elements are good to be initialized when an asynchronous function has completed executing or else the values passed to an MView template which is an end result of the asynchronous task may result to an **undefined** value.
 
 ### A Router Instance in Depth
 A Router instance houses the callback function that will be executed everytime user navigates to a new location using an **MAnchor** (described in the later part of this documentation). This may contains operations related to preparing data for the hence created **MView** instances, AJAX requests, initialization of **MView** instances etc. A router's callback function must return all variable having **MView** instance or else the hence initilized elements in the missing MView instance variable are not shown in the resulting route view.
@@ -240,6 +282,8 @@ app.run();
 
 ### 
 
+
+<!-- 
 You can use the [editor on GitHub](https://github.com/dreambitsfoundation/Monu-Framework/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
@@ -274,4 +318,4 @@ Your Pages site will use the layout and styles from the Jekyll theme you have se
 
 ### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out. -->
