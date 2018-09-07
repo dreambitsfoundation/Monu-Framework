@@ -106,8 +106,8 @@ An **MView** object is initialised inside a **MRouter** module. MRouter is descr
 var view = new MView();
 
 // Set the source mtemplate and destination DOM element
-
 view.registerView("source_MTemplate_DOM", "target_DOM_to_render_content");
+
 ```
 Here _source_MTemplate_DOM_ parameter refers to the value of **m_model** attibute of the source _MTemplate_ DOM.
 And _target_DOM_to_render_content_ parameter refers to the value of the **m-view** attribute of the target DOM. This target DOM can be any HTML DOM.
@@ -218,6 +218,10 @@ This will produce the following result in the _div_ DOM
 Hello! My name is John Doe.
 
 ```
+
+## MRouter 
+## -------------------
+
 ### Routers are very specific
 As explained above in the **App** section, a MonuApp instance must have a root router or else it will throw exception while executed. 
 
@@ -268,6 +272,8 @@ var contactRouter = new MRouter("contact",function(dataSet){
 	
 	//Any other code you would like to add
 
+	view.prepareView();
+	viewTwo.prepareView();
 	return [view,viewTwo];
 });
 
@@ -280,7 +286,32 @@ app.run();
 
 ```
 
-### 
+## MView
+## ---------------
+
+### Overview
+An MView object works as a channel between an **mtemplate** DOM element and a desired output DOM element. It prepares a virtual template to be rendered into a real DOM element.
+
+**Concept of MView**
+
+Any dynamic website contains only a minimum part of content that is dynamic and the rest of the content that is used 
+to present that data is static. So, if this static content is kept as a template and then compiled with dynamic 
+contents and rendered into a physical DOM element that would be a lot easier for a developer to handle the data back 
+and forth with the web application server. 
+
+It also facilitates front-end navigation in the website as the developer can employ REST API endpoints to fetch
+content and execute CRUD operations directly from the front-end.
+
+All the data members (including variables and functions) related to a particular view are suggested to be written 
+within the router's callback function so that they gets out of scope once the router has completed executing unless 
+any data member within the function is required by other router instances which needs the same data member to be 
+declared or initialized globally.
+
+**MView in depth**
+
+MView is used in MRouter instances to put a template into view, it also inserts and hence compiles the template with dynamic data 
+
+
 
 
 <!-- 
