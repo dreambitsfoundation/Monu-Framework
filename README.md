@@ -220,7 +220,6 @@ Hello! My name is John Doe.
 ```
 
 ## MRouter 
-## -------------------
 
 ### Routers are very specific
 As explained above in the **App** section, a MonuApp instance must have a root router or else it will throw exception while executed. 
@@ -236,7 +235,7 @@ Routers are created as synchronous instances hence **MView** elements are good t
 ### A Router Instance in Depth
 A Router instance houses the callback function that will be executed everytime user navigates to a new location using an **MAnchor** (described in the later part of this documentation). This may contains operations related to preparing data for the hence created **MView** instances, AJAX requests, initialization of **MView** instances etc. A router's callback function must return all variable having **MView** instance or else the hence initilized elements in the missing MView instance variable are not shown in the resulting route view.
 
-_Please Note:_ **MView** view instances can be made to be rendered earlier within the _callback_ function. This is explained in the later part of this documentation.
+_Please Note:_ **MView** view instances can be made to be rendered earlier within the _callback_ function. This is explained in the later part of this documentation.3
 
 ### Connecting the Router to the MonuApp instance
 After the router is initialized it has to be registered with the current _Monu App_ instance to listen to routes. Here the **registerRouter(routerInstanceVariable)** comes into use. **registerRouter(routerInstanceVariable)** is a memeber function of the MonuApp instance, so it has to be called on the current MonuAPP instance variable.
@@ -287,7 +286,6 @@ app.run();
 ```
 
 ## MView
-## ---------------
 
 ### Overview
 An MView object works as a channel between an **mtemplate** DOM element and a desired output DOM element. It prepares a virtual template to be rendered into a real DOM element.
@@ -309,7 +307,11 @@ declared or initialized globally.
 
 **MView in depth**
 
-MView is used in MRouter instances to put a template into view, it also inserts and hence compiles the template with dynamic data 
+MView is used in MRouter instances to put a template into view, it also inserts and hence compiles the template with 
+dynamic data before rendering it inside a view DOM. MView instance has various member functions that allows the 
+developer to control the presentation of the view as per convenience of the development.
+
+Generally 
 
 
 
